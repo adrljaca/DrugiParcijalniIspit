@@ -1,0 +1,22 @@
+CREATE DATABASE JavaAdv;
+GO
+USE JavaAdv;
+GO
+
+CREATE TABLE Polaznik (
+    PolaznikID INT IDENTITY PRIMARY KEY,
+    Ime NVARCHAR(100) NOT NULL,
+    Prezime NVARCHAR(100) NOT NULL
+);
+
+CREATE TABLE ProgramObrazovanja (
+    ProgramObrazovanjaID INT IDENTITY PRIMARY KEY,
+    Naziv NVARCHAR(100) NOT NULL,
+    CSVET INT NOT NULL
+);
+
+CREATE TABLE Upis (
+    UpisID INT IDENTITY PRIMARY KEY,
+    IDProgramObrazovanja INT NOT NULL FOREIGN KEY REFERENCES ProgramObrazovanja(ProgramObrazovanjaID),
+    IDPolaznik INT NOT NULL FOREIGN KEY REFERENCES Polaznik(PolaznikID)
+);
