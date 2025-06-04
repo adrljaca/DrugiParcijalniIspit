@@ -20,3 +20,56 @@ CREATE TABLE Upis (
     IDProgramObrazovanja INT NOT NULL FOREIGN KEY REFERENCES ProgramObrazovanja(ProgramObrazovanjaID),
     IDPolaznik INT NOT NULL FOREIGN KEY REFERENCES Polaznik(PolaznikID)
 );
+
+
+
+--- Procedure ---
+
+
+CREATE PROCEDURE UnesiPolaznika
+	@Ime NVARCHAR(100),
+	@Prezime NVARCHAR(100)
+AS
+BEGIN
+	INSERT INTO Polaznik (Ime, Prezime) VALUES (@Ime, @Prezime)
+END
+
+
+CREATE PROCEDURE UnesiProgram
+	@Naziv NVARCHAR(100),
+	@CSVET INT
+AS
+BEGIN
+	INSERT INTO ProgramObrazovanja (Naziv, CSVET) VALUES (@Naziv, @CSVET)
+END
+
+
+CREATE PROCEDURE UpisiPolaznika
+    @IDPolaznik INT,
+    @IDProgram INT
+AS
+BEGIN
+    INSERT INTO Upis (IDPolaznik, IDProgramObrazovanja) VALUES (@IDPolaznik, @IDProgram)
+END
+
+
+CREATE PROCEDURE PrebaciPolaznika
+    @IDPolaznik INT,
+    @IDProgramNovi INT
+AS
+BEGIN
+    DELETE FROM Upis WHERE IDPolaznik = @IDPolaznik;
+    INSERT INTO Upis (IDPolaznik, IDProgramObrazovanja) VALUES (@IDPolaznik, @IDProgramNovi);
+END
+
+
+CREATE PROCEDURE IspisiPolaznikeZaProgram
+    @IDProgram INT
+AS
+BEGIN
+    SELECT p.Ime, p.Prezime, pr.Naziv, pr.CSVET
+    FROM Upis u
+    JOIN Polaznik p ON u.IDPolaznik = p.PolaznikID
+    JOIN ProgramObrazovanja pr ON u.IDProgramObrazovanja = pr.ProgramObrazovanjaID
+    WHERE pr.ProgramObrazovanjaID = @IDProgram
+END
